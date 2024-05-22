@@ -1,30 +1,34 @@
-import UserData from "../data/UserData";
-
 interface userData {
     id:string,
+    email:string,
     name:string,
     age:number
 }
 
 class UserService {
+    private userData;
+    constructor(userData:any) {
+        this.userData = userData;
+    }
+
     public getUser(id: string):userData | {} {
         if(typeof id !== "string" || id.length < 1) {
             return {};
         }
-        return UserData.getOne("id", id);
+        return this.userData.getById("id", id);
     }
 
     public getAllUsers():userData[] {
-        return[];
+        return this.userData.getAll();
     }
 
     public createUser(userParams:userData):userData | undefined {
-        return undefined;
+        return this.userData.create();
     }
 
-    public updateUser(userID:string):userData | undefined {
-        return undefined;
+    public updateUser(id:string, userData:userData):userData | undefined {
+        return this.userData.update(id, userData);
     }
 }
 
-export default new UserService;
+export default UserService;

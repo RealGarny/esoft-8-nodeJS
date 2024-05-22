@@ -1,18 +1,15 @@
 import { Router } from "express";
-import UserService from "../services/UserService";
 
-const userRouter:Router = Router();
+const userRouter = (userController:any) => {
+    const userRouter:Router = Router();
 
-userRouter.post("/:id", (req,res)=>{
-    const user = UserService.getUser(req.params.id);
+    userRouter.get("", userController.getUsers)
+    userRouter.get("/:id", userController.getUser)
+    userRouter.post("", userController.createUser)
+    userRouter.put("/:id", userController.updateUser)
+    userRouter.delete("/:id", userController.deleteUser)
 
-    if(user) {
-        res.status(200);
-        res.json(user);
-    }
-    
-    res.status(400);
-    res.send("unexpected error");
-})
+    return userRouter;
+}
 
 export default userRouter;

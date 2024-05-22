@@ -3,8 +3,9 @@ import router from './routes';
 
 const app = express();
 const port = 4040;
+const bodyParser = express;
 
-app.use(express.json())
+app.use(bodyParser.json())
 app.use(router)
 
 app.listen(port, ()=> {

@@ -62,6 +62,33 @@ class UserController implements userController {
             res.status(400).json({error:"user was not deleted"});
         }
     }
+
+    public getFilteredByAge:controllerMethod = (req, res) => {
+        const usersByAge = this.userService.getFilteredByAge(req.params.age)
+        if(usersByAge) {
+            res.status(200).json(usersByAge);
+        } else {
+            res.status(400).json({error:"unexpected error"});
+        }
+    }
+
+    public getFilteredByDomain:controllerMethod = (req, res) => {
+        const usersByDomain = this.userService.getFilteredByDomain(req.params.domain)
+        if(usersByDomain) {
+            res.status(200).json(usersByDomain);
+        } else {
+            res.status(400).json({error:"unexpected error"});
+        }
+    }
+
+    public getSortedByName:controllerMethod = (req, res) => {
+        const sortedUsers = this.userService.getSortedByName()
+        if(sortedUsers) {
+            res.status(200).json(sortedUsers);
+        } else {
+            res.status(400).json({error:"unexpected error"});
+        }
+    }
 }
 
 export default UserController;

@@ -1,5 +1,3 @@
-import userUtils from "../utils/userUtils";
-import UserUtils from "../utils/userUtils";
 
 let data:userData[] = [
     {
@@ -31,6 +29,8 @@ interface userData {
 
 type userId = userData["id"]
 type userDataPartial = Partial<userData>;
+type sortOptions = "asc" | "desc";
+type returnSomeUsers = userData[] | boolean;
 
 class UserData {
     public getOneBy(keyname:keyof userData, value:any): userData | {} {
@@ -42,6 +42,11 @@ class UserData {
     }
 
     public getAllBy(keyname:keyof userData, value:any): userData[] {
+        /*
+        if(typeof value === "function") {
+            return data.filter(value)
+        }
+        */
         return data.filter((item)=> item[keyname] === value);
     }
 
@@ -71,10 +76,10 @@ class UserData {
         return true;
     }
 
-    public update(id:userId, userParams:userDataPartial): userData | undefined  | {} {
+    public update(id:userId, userParams:userDataPartial): userData | boolean | {} {
         let user = this.getOneBy("id", id);
         if(Object.keys(user).length < 1) {
-            return undefined;
+            return false;
         }
 
         for(let userParam in userParams) {
@@ -91,6 +96,24 @@ class UserData {
         data[userIndex] = user as userData;
 
         return user;
+    }
+
+    public getAgeMoreThan(age:number):returnSomeUsers {
+        if(typeof age !== "number") return false;
+        return(data.filter(item => age < item.age))
+    }
+
+    public getSortedByName(type:sortOptions):returnSomeUsers {
+        let dataCopy = [...data];
+        if(typeof type !== "string" || type.length < 1) return false;
+
+        dataCopy.sort((a, b) => a.name.localeCompare(b.name));
+        return dataCopy;
+    }
+
+    public getFilteredByDomain(domain:string):returnSomeUsers {
+        if(typeof domain !== "string") return false;
+        return data.filter((user) => user.email.replace(/.*@/, "") === domain)
     }
 }
 
